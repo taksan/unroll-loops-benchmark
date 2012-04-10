@@ -1,10 +1,13 @@
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-int main(int argc, char * args) {
+int main(int argc, char ** args) {
  	long i=0;
     long a= INT64_MAX;
-    long max = atoi(args[1]) ;// INT32_MAX * 4L;
+	char *endptr;
+    long max = strtoll(args[1], &endptr, 10);
+
 	printf("%ld\n", max);
 
     while ((i++) < max)
