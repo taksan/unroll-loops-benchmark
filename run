@@ -1,4 +1,5 @@
-PROGS="non-optimized simple-2 optimized mk1 mk2 mk3 mk4 java-normal java-unrolled"
+PROGS=*.bin" "java-*
+
 for P in $PROGS; do
 	echo "---Time for $P"
 	time ./$P 8589934592
