@@ -1,6 +1,24 @@
-PROGS=*.bin" "java-*
+#!/bin/bash
 
+runjava() {
+	export PATH=/usr/lib/jvm/jdk1.6.0_$JDK/bin:$PATH
+	for P in $JAVA; do
+		echo -n "---Time for $P JDK $JDK: "
+		( time ./$P 8589934592 ) 2>&1 | grep real
+	done
+}
+
+export JAVA=java-* 
+
+export JDK=24
+runjava
+
+export JDK=26
+runjava
+
+PROGS=*.bin
 for P in $PROGS; do
-	echo "---Time for $P"
-	time ./$P 8589934592
+	echo -n "---Time for $P"
+	( time ./$P 8589934592 ) | grep real
 done
+
