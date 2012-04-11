@@ -1,14 +1,20 @@
 #!/bin/bash
 
+do_benchmark() {
+	echo -n "---Time spent by '$FILE_TO_RUN': "
+	( time ./$FILE_TO_RUN 8589934592 ) 2>&1 | grep real
+}
+
 runjava() {
 	export PATH=/usr/lib/jvm/jdk1.6.0_$JDK/bin:$PATH
 	for P in $JAVA; do
-		echo -n "---Time for $P JDK $JDK: "
-		( time ./$P 8589934592 ) 2>&1 | grep real
+		echo -n "JDK $JDK - "
+		export FILE_TO_RUN=$P
+		do_benchmark
 	done
 }
 
-export JAVA=java-* 
+export JAVA=java-*
 
 export JDK=24
 runjava
@@ -18,7 +24,7 @@ runjava
 
 PROGS=*.bin
 for P in $PROGS; do
-	echo -n "---Time for $P"
-	( time ./$P 8589934592 ) | grep real
+	export FILE_TO_RUN=$P
+	do_benchmark
 done
 
