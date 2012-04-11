@@ -7,7 +7,7 @@ all:
 	gcc $(FLAGS) BenchmarkManualUnroll_Mk2.c  -o mk2.bin
 	gcc $(FLAGS) BenchmarkManualUnroll_Mk3.c  -o mk3.bin
 	gcc $(FLAGS) BenchmarkManualUnroll_Mk4.c  -o mk4.bin
-	javac Benchmark.java BenchmarkUnrolled.java
+	javac *.java
 
 clean:
 	rm -rf *.bin *.class
