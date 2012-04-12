@@ -1,30 +1,29 @@
 #!/bin/bash
+make clean all 2>&1 > /dev/null
+echo "Everything compiled"
 
 do_benchmark() {
-	echo -n "---Time spent by '$FILE_TO_RUN': "
-	( time ./$FILE_TO_RUN 8589934592 ) 2>&1 | grep real
+	FILE_TO_RUN=$2
+	MESSAGE="${1}Time spent by '$FILE_TO_RUN': "
+	echo $MESSAGE | awk ' BEGIN { FS = "," } ; { printf "%-45s ", $1 }' 
+	( time ./$FILE_TO_RUN 8589934592 ) 2>&1 | grep real | sed 's/.*0m/0m/'
+
 }
 
-runjava() {
-	export PATH=/usr/lib/jvm/jdk1.6.0_$JDK/bin:$PATH
-	for P in $JAVA; do
-		echo -n "JDK $JDK - "
-		export FILE_TO_RUN=$P
-		do_benchmark
+runbenchmark() {
+	PREFIX=$1
+	shift
+	for P in $*; do
+		do_benchmark $PREFIX $P
 	done
 }
 
-export JAVA=java-*
-
-export JDK=24
-runjava
+#export JDK=24
+#export PATH=/usr/lib/jvm/jdk1.6.0_$JDK/bin:$PATH
+#runbenchmark "(JDK $JDK)" java-*
 
 export JDK=26
-runjava
+export PATH=/usr/lib/jvm/jdk1.6.0_$JDK/bin:$PATH
+runbenchmark "(JDK-$JDK)" java-*
 
-PROGS=*.bin
-for P in $PROGS; do
-	export FILE_TO_RUN=$P
-	do_benchmark
-done
-
+runbenchmark "(C)" *.bin
